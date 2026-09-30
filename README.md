@@ -26,7 +26,8 @@ zully-ramos-web/
 ├── README.md
 ├── PRD.md
 ├── LECCIONES_APRENDIDAS.md
-└── TROUBLESHOOTING.md
+├── TROUBLESHOOTING.md
+└── graphify-out/        # Grafo de arquitectura (generado, no se versiona)
 ```
 
 ---
@@ -63,6 +64,32 @@ La imagen de vista previa al compartir el link se genera dinámicamente con Clou
 - **URL base:** `https://res.cloudinary.com/dldccvnyj/image/upload/...`
 
 Para cambiar la foto: subir la nueva imagen a Cloudinary y actualizar el public ID en las URLs de `og:image` y `twitter:image` dentro del `<head>`.
+
+---
+
+## Grafo de arquitectura (Graphify)
+
+La documentación viva de arquitectura se genera con [Graphify](https://github.com/Graphify-Labs/graphify). El grafo vive en `graphify-out/` y **no se versiona** (se regenera).
+
+```bash
+graphify update .                      # regenerar el grafo
+graphify query "donde esta la foto"    # consultar
+graphify affected "hero-image"         # que se rompe si toco esto
+graphify explain "hero-image"          # explicacion en lenguaje llano
+```
+
+Un hook `post-commit` regenera el grafo en cada commit. Si se clona el repo de nuevo hay que reinstalarlo (los hooks no viajan en git):
+
+```bash
+cat > .git/hooks/post-commit <<'HOOK'
+#!/bin/sh
+export PATH="$HOME/.local/bin:$PATH"
+command -v graphify >/dev/null 2>&1 && graphify update . >/dev/null 2>&1 &
+HOOK
+chmod +x .git/hooks/post-commit
+```
+
+**Convención:** consultar el grafo antes de refactors o de preguntar "¿cómo funciona X?", antes de abrir archivos a mano.
 
 ---
 
