@@ -13,7 +13,7 @@ Landing page profesional para la M.A.C. y Lic. en Contaduría Zully Tzetziangari
 | Frontend | HTML5 + CSS3 + Vanilla JS (un solo archivo) |
 | Hosting | Vercel (deploy automático desde GitHub) |
 | Formulario | Web3Forms (API gratuita, 250 envíos/mes) |
-| Imagen OG | Cloudinary (transformaciones vía URL) |
+| Foto e imagen OG | Cloudinary (transformaciones vía URL) |
 | Fuentes | Google Fonts — Cormorant Garamond + Inter |
 
 ---
@@ -55,15 +55,22 @@ Los mensajes llegan a **perito@zullyramos.com.mx**. El plan gratuito permite 250
 
 ---
 
-## Imagen OG (redes sociales)
+## Foto de perfil (Cloudinary)
 
-La imagen de vista previa al compartir el link se genera dinámicamente con Cloudinary:
+La foto **no se versiona en el repo**: vive en Cloudinary y se referencia en 3 lugares de `index.html`.
 
-- **Recorte:** 1200×630 con detección automática de cara (`g_face`)
-- **Texto superpuesto:** "Perito Contable" + nombre + "Solicitar consulta"
-- **URL base:** `https://res.cloudinary.com/dldccvnyj/image/upload/...`
+- **Cloud name:** `siu0xbwv`
+- **Public ID actual:** `WhatsApp_Image_2026-09-29_at_18.09.14`
 
-Para cambiar la foto: subir la nueva imagen a Cloudinary y actualizar el public ID en las URLs de `og:image` y `twitter:image` dentro del `<head>`.
+| Uso | Línea | Transformación |
+|---|---|---|
+| Hero | `<img class="hero-image">` | `f_auto,q_auto,c_fill,g_face,ar_3:4,w_740` |
+| `og:image` | `<head>` | `w_1200,h_630,c_fill,g_face` + 3 capas `l_text:` |
+| `twitter:image` | `<head>` | idéntica a `og:image` |
+
+El recorte lo hace Cloudinary por URL, no el CSS: `g_face` centra el rostro automáticamente y `ar_3:4` da el retrato vertical que espera el marco del hero. Por eso el `object-position` es `center top` y no un porcentaje afinado a mano — la foto ya llega encuadrada.
+
+**Para cambiar la foto:** subir la nueva imagen a Cloudinary y reemplazar el public ID en las 3 referencias. No hace falta recortarla antes: las transformaciones se encargan. Después, limpiar el caché de OG (ver `TROUBLESHOOTING.md`, problema 4).
 
 ---
 
